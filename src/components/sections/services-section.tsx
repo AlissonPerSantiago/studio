@@ -17,7 +17,7 @@ const services: Service[] = [
   {
     icon: Activity,
     title: "Manutenção Preventiva e Corretiva",
-    description: "Implementamos sistemas de monitoramento e análise de dados para prever falhas em equipamentos, minimizando paradas inesperadas.",
+    description: "Realizamos inspeção, reparo, plano de manutenção e manutenções corretivas em inversores e soft-starters.",
   },
   {
     icon: Network,
