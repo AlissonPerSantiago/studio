@@ -12,7 +12,7 @@ const services: Service[] = [
   {
     icon: Cog,
     title: "Automação de Processos",
-    description: "Desenvolvimento, aplicação e suporte em sistemas de automação industrial, utilizando soluções modernas e eficientes.",
+    description: "Soluções completas em automação e elétrica industrial: do desenvolvimento e aplicação ao suporte especializado.",
   },
   {
     icon: Activity,
