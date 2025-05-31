@@ -32,7 +32,7 @@ export default function Header() {
       <div className="container mx-auto flex h-20 items-center justify-between px-4 md:px-6">
         <Link href="/" className="flex items-center gap-2" prefetch={false}>
           <Image 
-            src="/vatechd.png" 
+            src="/logo.png" 
             alt="VATEC Automação Industrial Logo" 
             width={140} 
             height={35} 
@@ -66,7 +66,7 @@ export default function Header() {
             <div className="grid gap-4 p-6">
               <Link href="/" className="flex items-center gap-2 mb-4" prefetch={false}>
                  <Image 
-                    src="/vatechd.png" 
+                    src="/logo.png" 
                     alt="VATEC Automação Industrial Logo" 
                     width={120} 
                     height={30}
