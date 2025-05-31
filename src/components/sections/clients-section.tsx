@@ -16,12 +16,11 @@ interface Client {
 // Coloque suas imagens na pasta /public/clients/ e referencie-as como /clients/nome-da-imagem.png
 // Ou use URLs completas se as imagens estiverem hospedadas externamente.
 const clients: Client[] = [
-  { name: 'Cliente Alpha', logoUrl: 'https://placehold.co/150x75.png', logoAlt: 'Logo Cliente Alpha', dataAiHint: 'technology company' },
-  { name: 'Cliente Beta', logoUrl: 'https://placehold.co/150x75.png', logoAlt: 'Logo Cliente Beta', dataAiHint: 'industrial solutions' },
-  { name: 'Cliente Gamma', logoUrl: 'https://placehold.co/150x75.png', logoAlt: 'Logo Cliente Gamma', dataAiHint: 'energy sector' },
-  { name: 'Cliente Delta', logoUrl: 'https://placehold.co/150x75.png', logoAlt: 'Logo Cliente Delta', dataAiHint: 'construction group' },
-  { name: 'Cliente Epsilon', logoUrl: 'https://placehold.co/150x75.png', logoAlt: 'Logo Cliente Epsilon', dataAiHint: 'logistics services' },
-  { name: 'Cliente Zeta', logoUrl: 'https://placehold.co/150x75.png', logoAlt: 'Logo Cliente Zeta', dataAiHint: 'manufacturing firm' },
+  { name: 'Cliente Alpha', logoUrl: '/clients/cliente1.png', logoAlt: 'Pedreira Massaguaçu', dataAiHint: 'technology company' },
+  { name: 'Cliente Beta', logoUrl: '/clients/cliente2.png', logoAlt: 'Manikraft Papel e Celulose', dataAiHint: 'industrial solutions' },
+  { name: 'Cliente Gamma', logoUrl: '/clients/cliente3.jpg', logoAlt: 'PKO Vidros', dataAiHint: 'energy sector' },
+  { name: 'Cliente Delta', logoUrl: '/clients/cliente4.avif', logoAlt: 'IPEL Papeis', dataAiHint: 'construction group' },
+  { name: 'Cliente Epsilon', logoUrl: '/clients/cliente5.png', logoAlt: 'Auti Automação', dataAiHint: 'logistics services' },
 ];
 
 // Duplica a lista de clientes para um efeito de marquee suave e contínuo
@@ -63,3 +62,4 @@ export default function ClientsSection() {
     </section>
   );
 }
+
