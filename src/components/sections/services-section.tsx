@@ -16,7 +16,7 @@ const services: Service[] = [
   },
   {
     icon: Activity,
-    title: "Manutenção Preditiva",
+    title: "Manutenção Preditiva e Corretiva",
     description: "Implementamos sistemas de monitoramento e análise de dados para prever falhas em equipamentos, minimizando paradas inesperadas.",
   },
   {

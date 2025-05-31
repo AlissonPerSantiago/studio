@@ -20,7 +20,7 @@ export default function HomePage() {
           <div className="container mx-auto px-4 md:px-6 text-center">
             <div className="max-w-3xl mx-auto">
               <h1 className="font-headline text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
-                Transforme Sua Indústria com <span className="text-primary">Automação Inteligente</span>
+                Soluções Industriais e <span className="text-primary">Projeto ideal para sua necessidade</span>
               </h1>
               <p className="mt-6 text-lg leading-8 text-muted-foreground sm:text-xl md:text-2xl">
                 Soluções de automação industrial que impulsionam a eficiência, reduzem custos e elevam a produtividade do seu negócio.
