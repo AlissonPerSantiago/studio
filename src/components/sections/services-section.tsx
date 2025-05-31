@@ -21,7 +21,7 @@ const services: Service[] = [
   },
   {
     icon: Network,
-    title: "Sistemas SCADA & HMI",
+    title: "Sistemas SCADA e Monitoramento de KPI",
     description: "Desenvolvemos e integramos sistemas supervisórios e de monitoramento de processos intuitivos para controle total da sua planta.",
   },
   {
