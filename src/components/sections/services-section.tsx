@@ -22,7 +22,7 @@ const services: Service[] = [
   {
     icon: Network,
     title: "Sistemas SCADA & HMI",
-    description: "Desenvolvemos e integramos sistemas supervisórios (SCADA) e interfaces homem-máquina (HMI) intuitivas para controle total da sua planta.",
+    description: "Desenvolvemos e integramos sistemas supervisórios e de monitoramento de processos intuitivos para controle total da sua planta.",
   },
   {
     icon: BriefcaseIcon,
