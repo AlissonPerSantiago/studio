@@ -1,5 +1,7 @@
+
 import Header from "@/components/layout/header";
 import ServicesSection from "@/components/sections/services-section";
+import ClientsSection from "@/components/sections/clients-section"; // Importar a nova seção
 import ContactSection from "@/components/sections/contact-section";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
@@ -48,6 +50,8 @@ export default function HomePage() {
         </section>
         
         <ServicesSection />
+
+        <ClientsSection /> {/* Adicionar a nova seção aqui */}
         
         <Separator className="my-12 md:my-16" />
         

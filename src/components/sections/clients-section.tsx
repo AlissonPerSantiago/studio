@@ -1,0 +1,65 @@
+
+// src/components/sections/clients-section.tsx
+"use client";
+
+import Image from 'next/image';
+import type { StaticImageData } from 'next/image'; // Importe apenas se for usar imagens locais importadas
+
+interface Client {
+  name: string;
+  logoUrl: string | StaticImageData;
+  logoAlt: string;
+  dataAiHint: string;
+}
+
+// Exemplo de logos de clientes. Substitua pelas suas imagens.
+// Coloque suas imagens na pasta /public/clients/ e referencie-as como /clients/nome-da-imagem.png
+// Ou use URLs completas se as imagens estiverem hospedadas externamente.
+const clients: Client[] = [
+  { name: 'Cliente Alpha', logoUrl: 'https://placehold.co/150x75.png', logoAlt: 'Logo Cliente Alpha', dataAiHint: 'technology company' },
+  { name: 'Cliente Beta', logoUrl: 'https://placehold.co/150x75.png', logoAlt: 'Logo Cliente Beta', dataAiHint: 'industrial solutions' },
+  { name: 'Cliente Gamma', logoUrl: 'https://placehold.co/150x75.png', logoAlt: 'Logo Cliente Gamma', dataAiHint: 'energy sector' },
+  { name: 'Cliente Delta', logoUrl: 'https://placehold.co/150x75.png', logoAlt: 'Logo Cliente Delta', dataAiHint: 'construction group' },
+  { name: 'Cliente Epsilon', logoUrl: 'https://placehold.co/150x75.png', logoAlt: 'Logo Cliente Epsilon', dataAiHint: 'logistics services' },
+  { name: 'Cliente Zeta', logoUrl: 'https://placehold.co/150x75.png', logoAlt: 'Logo Cliente Zeta', dataAiHint: 'manufacturing firm' },
+];
+
+// Duplica a lista de clientes para um efeito de marquee suave e contínuo
+const extendedClients = [...clients, ...clients];
+
+export default function ClientsSection() {
+  return (
+    <section id="clients" className="py-16 md:py-24 bg-muted/20">
+      <div className="container mx-auto px-4 md:px-6">
+        <div className="mb-12 text-center">
+          <h2 className="font-headline text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+            Nossos Clientes
+          </h2>
+          <p className="mt-4 text-lg text-muted-foreground">
+            Empresas que confiam em nossas soluções e expertise.
+          </p>
+        </div>
+        <div className="relative w-full overflow-hidden group">
+          <div className="flex animate-marquee group-hover:pause-animation whitespace-nowrap">
+            {extendedClients.map((client, index) => (
+              <div
+                key={`${client.name}-${index}`}
+                className="mx-8 flex h-24 flex-shrink-0 items-center justify-center"
+                title={client.name}
+              >
+                <Image
+                  src={client.logoUrl}
+                  alt={client.logoAlt}
+                  width={150}
+                  height={75}
+                  className="max-h-[60px] w-auto object-contain grayscale transition-all duration-300 ease-in-out hover:grayscale-0"
+                  data-ai-hint={client.dataAiHint}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
