@@ -32,15 +32,15 @@ export default function Header() {
       <div className="container mx-auto flex h-20 items-center justify-between px-4 md:px-6">
         <Link href="/" className="flex items-center gap-2" prefetch={false}>
           <Image 
-            src="/logo.png" 
-            alt="VatechD Logo" 
+            src="/vatechd.png" 
+            alt="VATEC Automação Industrial Logo" 
             width={140} 
             height={35} 
-            className="h-auto" // Adjusted for better responsiveness
+            className="h-auto"
             priority 
           />
           <span className="sr-only font-headline text-2xl font-semibold text-foreground">
-            Automação Eficiente
+            VATEC Automação Industrial
           </span>
         </Link>
         <nav className="hidden items-center gap-6 md:flex">
@@ -66,13 +66,13 @@ export default function Header() {
             <div className="grid gap-4 p-6">
               <Link href="/" className="flex items-center gap-2 mb-4" prefetch={false}>
                  <Image 
-                    src="/logo.png" 
-                    alt="Vatec Logo" 
+                    src="/vatechd.png" 
+                    alt="VATEC Automação Industrial Logo" 
                     width={120} 
                     height={30}
                     className="h-auto" 
                   />
-                <span className="sr-only font-headline text-xl font-semibold">Automação Eficiente</span>
+                <span className="sr-only font-headline text-xl font-semibold">VATEC Automação Industrial</span>
               </Link>
               <nav className="grid gap-2">
                 {navItems.map((item) => (

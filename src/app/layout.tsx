@@ -3,8 +3,8 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: 'Automação Eficiente',
-  description: 'Serviços de automação industrial para otimizar seus processos.',
+  title: 'VATEC Automação Industrial',
+  description: 'VATEC Automação Industrial: Serviços de automação industrial para otimizar seus processos.',
 };
 
 export default function RootLayout({

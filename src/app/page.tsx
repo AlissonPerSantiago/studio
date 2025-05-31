@@ -60,7 +60,7 @@ export default function HomePage() {
       <footer className="bg-muted py-8 text-center text-muted-foreground">
         <div className="container mx-auto px-4 md:px-6">
           <p className="text-sm">
-            &copy; {new Date().getFullYear()} Automação Eficiente. Todos os direitos reservados.
+            &copy; {new Date().getFullYear()} VATEC Automação Industrial. Todos os direitos reservados.
           </p>
            <p className="text-xs mt-1">
             Desenvolvido com <span className="text-primary">&hearts;</span> para a Indústria 4.0
