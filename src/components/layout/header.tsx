@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Briefcase } from "lucide-react"; // Using Briefcase as a placeholder logo icon
+import { Menu } from "lucide-react"; 
 import React from 'react';
 
 export default function Header() {
@@ -30,8 +31,15 @@ export default function Header() {
     >
       <div className="container mx-auto flex h-20 items-center justify-between px-4 md:px-6">
         <Link href="/" className="flex items-center gap-2" prefetch={false}>
-          <Briefcase className="h-7 w-7 text-primary" />
-          <span className="font-headline text-2xl font-semibold text-foreground">
+          <Image 
+            src="/vatechd.png" 
+            alt="VatechD Logo" 
+            width={140} 
+            height={35} 
+            className="h-auto" // Adjusted for better responsiveness
+            priority 
+          />
+          <span className="sr-only font-headline text-2xl font-semibold text-foreground">
             Automação Eficiente
           </span>
         </Link>
@@ -56,9 +64,15 @@ export default function Header() {
           </SheetTrigger>
           <SheetContent side="right">
             <div className="grid gap-4 p-6">
-              <Link href="/" className="flex items-center gap-2" prefetch={false}>
-                 <Briefcase className="h-7 w-7 text-primary" />
-                <span className="font-headline text-xl font-semibold">Automação Eficiente</span>
+              <Link href="/" className="flex items-center gap-2 mb-4" prefetch={false}>
+                 <Image 
+                    src="/vatechd.png" 
+                    alt="VatechD Logo" 
+                    width={120} 
+                    height={30}
+                    className="h-auto" 
+                  />
+                <span className="sr-only font-headline text-xl font-semibold">Automação Eficiente</span>
               </Link>
               <nav className="grid gap-2">
                 {navItems.map((item) => (
