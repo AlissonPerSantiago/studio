@@ -66,8 +66,8 @@ export default function Header() {
             <div className="grid gap-4 p-6">
               <Link href="/" className="flex items-center gap-2 mb-4" prefetch={false}>
                  <Image 
-                    src="/vatechd.png" 
-                    alt="VatechD Logo" 
+                    src="/logo.png" 
+                    alt="Vatec Logo" 
                     width={120} 
                     height={30}
                     className="h-auto" 
