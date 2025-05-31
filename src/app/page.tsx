@@ -41,20 +41,20 @@ export default function HomePage() {
               </div>
             </div>
           </div>
-           <div 
-            className="absolute bottom-0 left-0 right-0 h-20" 
+           <div
+            className="absolute bottom-0 left-0 right-0 h-20"
             style={{
               background: 'linear-gradient(to top, hsl(var(--background)), transparent)'
             }}
           />
         </section>
-        
+
         <ServicesSection />
 
         <ClientsSection /> {/* Adicionar a nova seção aqui */}
-        
+
         <Separator className="my-12 md:my-16" />
-        
+
         <ContactSection />
       </main>
       <footer className="bg-muted py-8 text-center text-muted-foreground">
@@ -63,7 +63,7 @@ export default function HomePage() {
             &copy; {new Date().getFullYear()} VATEC Automação Industrial. Todos os direitos reservados.
           </p>
            <p className="text-xs mt-1">
-            Desenvolvido com <span className="text-primary">&hearts;</span> para a Indústria 4.0
+            Desenvolvido por Alisson Pereira Santiago
           </p>
         </div>
       </footer>
