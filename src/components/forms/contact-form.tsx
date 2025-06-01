@@ -19,7 +19,9 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { useToast } from "@/hooks/use-toast";
 import { Send, Loader2 } from "lucide-react";
 import { useState } from "react";
-import { submitContactForm } from "@/app/actions/contact-actions"; // Import the server action
+
+// Endpoint real do Formspree fornecido pelo usuário
+const FORM_ENDPOINT_URL = "https://formspree.io/f/xblyrbel";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -33,6 +35,8 @@ const formSchema = z.object({
   }).max(500, {
     message: "A mensagem não pode exceder 500 caracteres.",
   }),
+  // Campo opcional para honeypot do Formspree, se você configurar um
+  // _gotcha: z.string().optional(),
 });
 
 export type ContactFormData = z.infer<typeof formSchema>;
@@ -47,32 +51,46 @@ export default function ContactForm() {
       name: "",
       email: "",
       message: "",
+      // _gotcha: "", // Se usar honeypot
     },
   });
 
   async function onSubmit(values: ContactFormData) {
     setIsSubmitting(true);
     try {
-      const result = await submitContactForm(values);
-      if (result.success) {
+      const response = await fetch(FORM_ENDPOINT_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json", // Importante para Formspree tratar como AJAX
+        },
+        body: JSON.stringify(values),
+      });
+
+      if (response.ok) {
+        // A resposta do Formspree com status 200 geralmente indica sucesso
+        // Pode haver um corpo JSON com mais detalhes, mas para uma mensagem simples, isso basta.
         toast({
           title: "Mensagem Enviada!",
-          description: result.message,
+          description: "Sua mensagem foi enviada com sucesso. Responderemos em breve!",
           variant: "default",
         });
         form.reset();
       } else {
+        // Se o Formspree retornar um erro (ex: 4xx, 5xx)
+        const errorData = await response.json().catch(() => ({})); // Tenta pegar a resposta de erro JSON
+        const errorMessage = errorData.error || "Falha ao enviar mensagem. Verifique os dados ou tente mais tarde.";
         toast({
           title: "Erro ao Enviar",
-          description: result.message,
+          description: errorMessage,
           variant: "destructive",
         });
       }
     } catch (error) {
-      console.error("Erro no envio do formulário:", error);
+      console.error("Erro no envio do formulário para Formspree:", error);
       toast({
         title: "Erro Inesperado",
-        description: "Ocorreu um erro inesperado. Por favor, tente mais tarde.",
+        description: "Ocorreu um erro inesperado ao tentar enviar sua mensagem. Por favor, tente mais tarde.",
         variant: "destructive",
       });
     } finally {
@@ -108,6 +126,7 @@ export default function ContactForm() {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
+                    {/* O Formspree usa o campo 'name="email"' para o endereço de resposta */}
                     <Input type="email" placeholder="seu@email.com" {...field} name="email" disabled={isSubmitting} />
                   </FormControl>
                   <FormMessage />
@@ -125,7 +144,7 @@ export default function ContactForm() {
                       placeholder="Descreva sua necessidade ou dúvida..."
                       className="min-h-[120px]"
                       {...field}
-                      name="message"
+                      name="message" // O Formspree também usa 'name="message"'
                       disabled={isSubmitting}
                     />
                   </FormControl>
@@ -133,6 +152,19 @@ export default function ContactForm() {
                 </FormItem>
               )}
             />
+            {/* Se você usar um campo honeypot no Formspree:
+            <FormField
+              control={form.control}
+              name="_gotcha"
+              render={({ field }) => (
+                <FormItem className="hidden">
+                  <FormControl>
+                    <Input type="text" {...field} autoComplete="off" />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            */}
           </CardContent>
           <CardFooter>
             <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
