@@ -15,7 +15,7 @@ export default function HomePage() {
     <div className="flex min-h-[100dvh] flex-col">
       <Header />
       <main className="flex-1">
-        <section id="hero" className="relative w-full py-20 md:py-32 lg:py-40 xl:py-48 bg-gradient-to-br from-primary/10 via-background to-background">
+        <section id="hero" className="relative w-full py-20 md:py-32 lg:py-40 xl:py-48 bg-secondary">
           <div className="absolute inset-0 -z-10">
             {/* Optional: subtle background pattern or image */}
           </div>
