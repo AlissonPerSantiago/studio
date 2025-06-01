@@ -35,8 +35,8 @@ export default function Header() {
           <Image 
             src="/logo.png" 
             alt="VATEC Automação Industrial Logo" 
-            width={140} 
-            height={35} 
+            width={160} 
+            height={40} 
             className="h-auto"
             priority
             data-ai-hint="logo"
@@ -70,8 +70,8 @@ export default function Header() {
                  <Image 
                     src="/logo.png" 
                     alt="VATEC Automação Industrial Logo" 
-                    width={120} 
-                    height={30}
+                    width={136} 
+                    height={34}
                     className="h-auto"
                     data-ai-hint="logo" 
                   />
