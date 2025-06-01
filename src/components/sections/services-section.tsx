@@ -1,7 +1,7 @@
+
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Cog, Activity, Network, Briefcase as BriefcaseIcon } from "lucide-react"; 
 import type { LucideIcon } from "lucide-react";
-import AnimatedItem from '@/components/ui/animated-item';
 
 interface Service {
   icon: LucideIcon;
@@ -36,7 +36,7 @@ export default function ServicesSection() {
   return (
     <section id="services" className="py-16 md:py-24 bg-background">
       <div className="container mx-auto px-4 md:px-6">
-        <AnimatedItem animationType="fadeInUp">
+        
           <div className="mb-12 text-center">
             <h2 className="font-headline text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
               Nossos Serviços
@@ -45,11 +45,11 @@ export default function ServicesSection() {
               Soluções inovadoras para a automação da sua indústria.
             </p>
           </div>
-        </AnimatedItem>
+        
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
           {services.map((service, index) => (
-            <AnimatedItem key={service.title} delay={index * 150} animationType="fadeInUp">
-              <Card className="flex flex-col overflow-hidden shadow-lg transition-all hover:shadow-xl h-full">
+            
+              <Card key={service.title} className="flex flex-col overflow-hidden shadow-lg transition-all hover:shadow-xl h-full">
                 <CardHeader className="bg-muted/30 p-6">
                   <div className="mb-4 flex justify-center">
                     <service.icon className="h-12 w-12 text-primary" />
@@ -62,7 +62,7 @@ export default function ServicesSection() {
                   </CardDescription>
                 </CardContent>
               </Card>
-            </AnimatedItem>
+            
           ))}
         </div>
       </div>

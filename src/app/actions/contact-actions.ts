@@ -1,6 +1,20 @@
 
 'use server';
 
+// Este arquivo foi intencionalmente esvaziado.
+// A funcionalidade de envio de email foi migrada para o Formspree
+// no componente src/components/forms/contact-form.tsx.
+// Manter a lógica anterior baseada em Nodemailer aqui pode causar
+// "Internal Server Errors" durante o build de um site estático (output: 'export')
+// porque Nodemailer e outras dependências do lado do servidor não podem ser executadas
+// em um ambiente puramente estático.
+
+// Se você precisar reativar o envio de email via backend no futuro (por exemplo,
+// mudando para um ambiente de hospedagem com Node.js), você precisará
+// reimplementar a lógica de envio de email aqui e ajustar o formulário de contato
+// para chamar esta server action novamente.
+
+/*
 import nodemailer from 'nodemailer';
 import { z } from 'zod';
 
@@ -22,7 +36,6 @@ export async function submitContactForm(
 ): Promise<SubmitContactFormResponse> {
   const parsedData = contactFormSchema.safeParse(data);
   if (!parsedData.success) {
-    // Extract specific error messages if needed, or a generic one
     const firstError = parsedData.error.errors[0]?.message || "Dados inválidos.";
     return { success: false, message: firstError };
   }
@@ -39,25 +52,17 @@ export async function submitContactForm(
   const transporter = nodemailer.createTransport({
     host: SMTP_HOST,
     port: parseInt(SMTP_PORT, 10),
-    secure: parseInt(SMTP_PORT, 10) === 465, // true for 465, false for other ports
+    secure: parseInt(SMTP_PORT, 10) === 465,
     auth: {
       user: SMTP_USER,
       pass: SMTP_PASS,
     },
-    // Se o seu servidor SMTP tiver um certificado SSL/TLS autoassinado ou inválido,
-    // você pode precisar adicionar o seguinte. Use com cautela em produção.
-    // tls: {
-    //   rejectUnauthorized: false
-    // }
   });
 
   const mailOptions = {
-    // É uma boa prática usar o email autenticado (SMTP_USER) como remetente 'from'
-    // e colocar o email do usuário no campo 'replyTo'. Alguns provedores podem marcar
-    // como spam se o 'from' for um email não autenticado pelo servidor.
     from: `"${name} via Site" <${SMTP_USER}>`,
     replyTo: email,
-    to: EMAIL_TO, // O email que receberá a mensagem
+    to: EMAIL_TO,
     subject: `Nova mensagem de contato de ${name}`,
     text: `Você recebeu uma nova mensagem do formulário de contato do site:\n\nNome: ${name}\nEmail: ${email}\n\nMensagem:\n${message}`,
     html: `
@@ -75,7 +80,7 @@ export async function submitContactForm(
     return { success: true, message: "Mensagem enviada com sucesso! Responderemos em breve." };
   } catch (error) {
     console.error("Erro ao enviar email via Nodemailer:", error);
-    // Não exponha detalhes do erro ao cliente por segurança.
     return { success: false, message: "Falha ao enviar mensagem. Por favor, tente novamente mais tarde." };
   }
 }
+*/

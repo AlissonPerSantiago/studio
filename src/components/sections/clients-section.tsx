@@ -4,7 +4,6 @@
 
 import Image from 'next/image';
 import type { StaticImageData } from 'next/image'; 
-import AnimatedItem from '@/components/ui/animated-item';
 
 interface Client {
   name: string;
@@ -27,7 +26,7 @@ export default function ClientsSection() {
   return (
     <section id="clients" className="py-16 md:py-24 bg-muted/20">
       <div className="container mx-auto px-4 md:px-6">
-        <AnimatedItem animationType="fadeInUp">
+        
           <div className="mb-12 text-center">
             <h2 className="font-headline text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
               Clientes e Parceiros
@@ -36,8 +35,8 @@ export default function ClientsSection() {
               Empresas que confiam em nossas soluções e expertise.
             </p>
           </div>
-        </AnimatedItem>
-        <AnimatedItem animationType="fadeIn">
+        
+        
           <div className="relative w-full overflow-hidden group">
             <div className="flex animate-marquee group-hover:pause-animation whitespace-nowrap">
               {extendedClients.map((client, index) => (
@@ -58,7 +57,7 @@ export default function ClientsSection() {
               ))}
             </div>
           </div>
-        </AnimatedItem>
+        
       </div>
     </section>
   );

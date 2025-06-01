@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import { ChevronRight, Phone, Mail, MapPin } from "lucide-react";
-import AnimatedItem from "@/components/ui/animated-item";
 
 
 export default function HomePage() {
@@ -23,17 +22,17 @@ export default function HomePage() {
           </div>
           <div className="container mx-auto px-4 md:px-6 text-center">
             <div className="max-w-3xl mx-auto">
-              <AnimatedItem animationType="fadeInUp" delay={100}>
+              
                 <h1 className="font-headline text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
                   Seu parceiro ideal em <span className="text-primary">Elétrica e Automação Industrial</span>
                 </h1>
-              </AnimatedItem>
-              <AnimatedItem animationType="fadeInUp" delay={250}>
+              
+              
                 <p className="mt-6 text-lg leading-8 text-muted-foreground sm:text-xl md:text-2xl">
                   Soluções de automação industrial que impulsionam a eficiência, reduzem custos e elevam a produtividade do seu negócio.
                 </p>
-              </AnimatedItem>
-              <AnimatedItem animationType="fadeInUp" delay={400}>
+              
+              
                 <div className="mt-10 flex items-center justify-center gap-x-6">
                   <Button asChild size="lg" className="shadow-md">
                     <Link href="#services">
@@ -46,7 +45,7 @@ export default function HomePage() {
                     </Link>
                   </Button>
                 </div>
-              </AnimatedItem>
+              
             </div>
           </div>
            <div
