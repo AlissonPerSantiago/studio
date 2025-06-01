@@ -19,7 +19,6 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { useToast } from "@/hooks/use-toast";
 import { Send, Loader2 } from "lucide-react";
 import { useState } from "react";
-// Removida a importação da Server Action: import { submitContactForm } from "@/app/actions/contact-actions";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -33,12 +32,14 @@ const formSchema = z.object({
   }).max(500, {
     message: "A mensagem não pode exceder 500 caracteres.",
   }),
+  // Campo honeypot opcional para Formspree, se desejar
+  // _gotcha: z.string().optional(),
 });
 
 export type ContactFormData = z.infer<typeof formSchema>;
 
-// Substitua pela URL do seu script PHP ou serviço de formulário
-const FORM_ENDPOINT_URL = "/api/enviar-contato.php"; // Exemplo: você precisará criar este script no seu servidor
+// INSTRUÇÃO IMPORTANTE: Substitua pela URL do seu endpoint Formspree!
+const FORM_ENDPOINT_URL = "https://formspree.io/f/YOUR_FORM_ID"; // Substitua YOUR_FORM_ID pelo ID do seu formulário Formspree
 
 export default function ContactForm() {
   const { toast } = useToast();
@@ -50,46 +51,46 @@ export default function ContactForm() {
       name: "",
       email: "",
       message: "",
+      // _gotcha: "", // Inicialize se estiver usando o campo honeypot
     },
   });
 
   async function onSubmit(values: ContactFormData) {
     setIsSubmitting(true);
+
+    if (FORM_ENDPOINT_URL === "https://formspree.io/f/YOUR_FORM_ID") {
+      toast({
+        title: "Configuração Necessária",
+        description: "Por favor, substitua 'YOUR_FORM_ID' no código pelo seu ID de formulário Formspree.",
+        variant: "destructive",
+      });
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
       const response = await fetch(FORM_ENDPOINT_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json', // Importante para Formspree com AJAX
         },
         body: JSON.stringify(values),
       });
 
       if (response.ok) {
-        // Tente pegar uma mensagem de sucesso do backend, se houver
-        let responseData = { message: "Obrigado por entrar em contato. Responderemos em breve." };
-        try {
-            responseData = await response.json();
-        } catch (e) {
-            // Se o backend não retornar JSON ou estiver vazio, usa a mensagem padrão
-        }
-
+        const responseData = await response.json();
         toast({
           title: "Mensagem Enviada!",
-          description: responseData.message,
+          description: responseData.message || "Obrigado por entrar em contato. Responderemos em breve.",
           variant: "default",
         });
         form.reset();
       } else {
-        // Tente pegar uma mensagem de erro do backend, se houver
-        let errorData = { error: "Houve um problema ao enviar sua mensagem. Tente novamente." };
-         try {
-            errorData = await response.json();
-        } catch (e) {
-            // Se o backend não retornar JSON ou estiver vazio, usa a mensagem padrão
-        }
+        const errorData = await response.json();
         toast({
           title: "Erro ao Enviar",
-          description: `${errorData.error} (Status: ${response.status})`,
+          description: errorData.error || `Houve um problema ao enviar sua mensagem. (Status: ${response.status})`,
           variant: "destructive",
         });
       }
@@ -113,6 +114,18 @@ export default function ContactForm() {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <CardContent className="space-y-6">
+            {/* Campo honeypot opcional para Formspree - adicione se ativado no Formspree */}
+            {/* <FormField
+              control={form.control}
+              name="_gotcha"
+              render={({ field }) => (
+                <FormItem className="hidden">
+                  <FormControl>
+                    <Input {...field} autoComplete="off" tabIndex={-1} />
+                  </FormControl>
+                </FormItem>
+              )}
+            /> */}
             <FormField
               control={form.control}
               name="name"
@@ -133,7 +146,7 @@ export default function ContactForm() {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input type="email" placeholder="seu@email.com" {...field} disabled={isSubmitting} />
+                    <Input type="email" placeholder="seu@email.com" {...field} name="email" disabled={isSubmitting} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -150,6 +163,7 @@ export default function ContactForm() {
                       placeholder="Descreva sua necessidade ou dúvida..."
                       className="min-h-[120px]"
                       {...field}
+                      name="message"
                       disabled={isSubmitting}
                     />
                   </FormControl>

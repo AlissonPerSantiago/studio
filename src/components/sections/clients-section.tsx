@@ -1,4 +1,3 @@
-
 // src/components/sections/clients-section.tsx
 "use client";
 
@@ -13,14 +12,13 @@ interface Client {
 }
 
 // Exemplo de logos de clientes. Substitua pelas suas imagens.
-// Coloque suas imagens na pasta /public/clients/ e referencie-as como /clients/nome-da-imagem.png
-// Ou use URLs completas se as imagens estiverem hospedadas externamente.
+// Se usar imagens locais, coloque-as na pasta /public/clients/ e referencie-as como /clients/nome-da-imagem.png
 const clients: Client[] = [
-  { name: 'Cliente Alpha', logoUrl: '/clients/cliente1.png', logoAlt: 'Pedreira Massaguaçu', dataAiHint: 'technology company' },
-  { name: 'Cliente Beta', logoUrl: '/clients/cliente2.png', logoAlt: 'Manikraft Papel e Celulose', dataAiHint: 'industrial solutions' },
-  { name: 'Cliente Gamma', logoUrl: '/clients/cliente3.jpg', logoAlt: 'PKO Vidros', dataAiHint: 'energy sector' },
-  { name: 'Cliente Delta', logoUrl: '/clients/cliente4.avif', logoAlt: 'IPEL Papeis', dataAiHint: 'construction group' },
-  { name: 'Cliente Epsilon', logoUrl: '/clients/cliente5.png', logoAlt: 'Auti Automação', dataAiHint: 'logistics services' },
+  { name: 'Cliente Alpha', logoUrl: 'https://placehold.co/150x75.png', logoAlt: 'Pedreira Massaguaçu', dataAiHint: 'technology company' },
+  { name: 'Cliente Beta', logoUrl: 'https://placehold.co/150x75.png', logoAlt: 'Manikraft Papel e Celulose', dataAiHint: 'industrial solutions' },
+  { name: 'Cliente Gamma', logoUrl: 'https://placehold.co/150x75.png', logoAlt: 'PKO Vidros', dataAiHint: 'energy sector' },
+  { name: 'Cliente Delta', logoUrl: 'https://placehold.co/150x75.png', logoAlt: 'IPEL Papeis', dataAiHint: 'construction group' },
+  { name: 'Cliente Epsilon', logoUrl: 'https://placehold.co/150x75.png', logoAlt: 'Auti Automação', dataAiHint: 'logistics services' },
 ];
 
 // Duplica a lista de clientes para um efeito de marquee suave e contínuo
@@ -47,7 +45,7 @@ export default function ClientsSection() {
                 title={client.name}
               >
                 <Image
-                  src={client.logoUrl}
+                  src={client.logoUrl as string} // Cast to string as we are now sure it's a URL
                   alt={client.logoAlt}
                   width={150}
                   height={75}
@@ -62,4 +60,3 @@ export default function ClientsSection() {
     </section>
   );
 }
-
