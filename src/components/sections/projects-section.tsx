@@ -21,15 +21,15 @@ const projectsData: Project[] = [
   },
   {
     id: 'proj2',
-    title: 'Monitoramento',
+    title: 'Monitoramento SCADA',
     description: 'Desenvolvimento de sistema supervisório para controle em tempo real.',
     imageUrl: 'https://placehold.co/600x400.png',
     dataAiHint: 'industrial control panel',
   },
   {
     id: 'proj3',
-    title: 'Melhorias',
-    description: 'Automação e Elétrica para redução de paradas e aumento de eficiência.',
+    title: 'Otimização Energética',
+    description: 'Automação para redução de consumo de energia em planta industrial.',
     imageUrl: 'https://placehold.co/600x400.png',
     dataAiHint: 'robotic arm assembly',
   },
