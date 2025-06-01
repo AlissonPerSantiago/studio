@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 interface AnimatedItemProps {
   children: React.ReactNode;
   className?: string;
-  delay?: number; 
+  delay?: number;
   animationType?: 'fadeInUp' | 'fadeIn';
   threshold?: number;
   once?: boolean;
@@ -25,24 +25,22 @@ const AnimatedItem: React.FC<AnimatedItemProps> = ({
   const itemRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Ensure IntersectionObserver is available, though it's widely supported
     if (typeof IntersectionObserver === 'undefined') {
-      setIsVisible(true); // Fallback for very old browsers or environments
+      setIsVisible(true);
       return;
     }
 
+    let timeoutId: NodeJS.Timeout | null = null;
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setTimeout(() => {
+            timeoutId = setTimeout(() => {
               setIsVisible(true);
             }, delay);
-            if (once && itemRef.current) { // Check ref.current exists before unobserving
+            if (once && itemRef.current) {
               observer.unobserve(itemRef.current);
             }
-          } else if (!once) {
-             // setIsVisible(false); // Option to re-trigger animation
           }
         });
       },
@@ -60,11 +58,13 @@ const AnimatedItem: React.FC<AnimatedItemProps> = ({
       if (currentRefValue) {
         observer.unobserve(currentRefValue);
       }
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
     };
-  }, [delay, animationType, threshold, once]);
+  }, [delay, threshold, once]); // animationType removed from dependencies as it's not used in the effect logic
 
   const animationClasses = {
-    // Simplified fadeInUp to only use opacity for now
     fadeInUp: `transition-opacity duration-700 ease-out ${isVisible ? 'opacity-100' : 'opacity-0'}`,
     fadeIn: `transition-opacity duration-700 ease-out ${isVisible ? 'opacity-100' : 'opacity-0'}`,
   };
