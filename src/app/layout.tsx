@@ -27,6 +27,7 @@ export const metadata: Metadata = {
     description: 'Serviços de automação industrial para otimizar seus processos e impulsionar a eficiência.',
     url: siteUrl,
     siteName: 'VATEC Automação Industrial',
+    /*
     images: [
       {
         url: '/logo.png', // Caminho relativo, `metadataBase` resolverá para absoluto
@@ -35,9 +36,11 @@ export const metadata: Metadata = {
         alt: 'Logo VATEC Automação Industrial',
       },
     ],
+    */
     locale: 'pt_BR',
     type: 'website',
   },
+  /*
   icons: {
     icon: [ // Or an array of multiple icons, with different resolutions etc.
       { url: '/favicon.ico', sizes: 'any' },
@@ -46,6 +49,7 @@ export const metadata: Metadata = {
     apple: '/apple-touch-icon.png',
   },
   manifest: '/site.webmanifest',
+  */
   // themeColor: '#FFFFFF', // Adicione aqui se desejar, substitua pela cor do seu tema
   // Link to Google Fonts
   link: [
@@ -72,7 +76,7 @@ const organizationSchema = {
   "@type": "Organization",
   "name": "VATEC Automação Industrial",
   "url": siteUrl,
-  "logo": `${siteUrl}/logo.png`, // URL absoluta da logo
+  // "logo": `${siteUrl}/logo.png`, // URL absoluta da logo
   "description": "VATEC Automação Industrial oferece serviços de automação industrial para otimizar processos e aumentar a eficiência.",
   // Você pode adicionar mais detalhes aqui, como "contactPoint", "address", "sameAs" (redes sociais).
   // Exemplo (substitua com dados reais se desejar adicionar):
