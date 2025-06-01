@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
@@ -37,11 +38,31 @@ export const metadata: Metadata = {
     locale: 'pt_BR',
     type: 'website',
   },
-  // Para favicons e ícones, o Next.js recomenda colocá-los diretamente na pasta /app ou /public
-  // e nomeá-los de acordo com as convenções (favicon.ico, apple-icon.png, etc.)
-  // As tags abaixo são adicionadas manualmente para garantir compatibilidade e cobrir mais casos.
-  // No entanto, com o App Router, o Next.js pode gerar automaticamente algumas dessas tags se os arquivos estiverem nos locais corretos.
-  // Veja: https://nextjs.org/docs/app/api-reference/file-conventions/metadata/app-icons
+  icons: {
+    icon: [ // Or an array of multiple icons, with different resolutions etc.
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icon.svg', type: 'image/svg+xml' },
+    ],
+    apple: '/apple-touch-icon.png',
+  },
+  manifest: '/site.webmanifest',
+  // themeColor: '#FFFFFF', // Adicione aqui se desejar, substitua pela cor do seu tema
+  // Link to Google Fonts
+  link: [
+    {
+      rel: 'preconnect',
+      href: 'https://fonts.googleapis.com',
+    },
+    {
+      rel: 'preconnect',
+      href: 'https://fonts.gstatic.com',
+      crossOrigin: 'anonymous',
+    },
+    {
+      rel: 'stylesheet',
+      href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap',
+    },
+  ],
 };
 
 // Dados estruturados JSON-LD para a Organização
@@ -72,29 +93,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <head>
-        {/* Tags meta básicas já são gerenciadas pelo Next.js através do objeto metadata */}
-        {/* <meta charSet="utf-8" /> */}
-        {/* <meta name="viewport" content="width=device-width, initial-scale=1" /> */}
-        
-        {/* Favicons e ícones - Coloque os arquivos correspondentes na pasta /public */}
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" href="/icon.svg" type="image/svg+xml" /> {/* Se tiver um SVG */}
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" /> {/* Ex: 180x180px */}
-        <link rel="manifest" href="/site.webmanifest" /> {/* Para PWA e adicionar à tela inicial */}
-        
-        {/* Thema color para navegadores móveis */}
-        {/* <meta name="theme-color" content="#FFFFFF" /> */} {/* Substitua #FFFFFF pela cor principal do seu tema */}        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+      <body className="font-body antialiased">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
           key="organization-schema"
         />
-      </head>
-      <body className="font-body antialiased">
         {children}
         <Toaster />
       </body>
