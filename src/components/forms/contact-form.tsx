@@ -1,3 +1,4 @@
+
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,7 +17,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Send } from "lucide-react";
+import { Send, Loader2 } from "lucide-react";
+import { useState } from "react";
+import { submitContactForm } from "@/app/actions/contact-actions";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -32,10 +35,13 @@ const formSchema = z.object({
   }),
 });
 
+export type ContactFormData = z.infer<typeof formSchema>;
+
 export default function ContactForm() {
   const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<ContactFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
@@ -44,15 +50,35 @@ export default function ContactForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Simulate form submission
-    console.log(values);
-    toast({
-      title: "Mensagem Enviada!",
-      description: "Obrigado por entrar em contato. Responderemos em breve.",
-      variant: "default", 
-    });
-    form.reset();
+  async function onSubmit(values: ContactFormData) {
+    setIsSubmitting(true);
+    try {
+      const result = await submitContactForm(values);
+
+      if (result.success) {
+        toast({
+          title: "Mensagem Enviada!",
+          description: result.message || "Obrigado por entrar em contato. Responderemos em breve.",
+          variant: "default",
+        });
+        form.reset();
+      } else {
+        toast({
+          title: "Erro ao Enviar",
+          description: result.error || "Houve um problema ao enviar sua mensagem. Tente novamente.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error("Erro no envio do formulário:", error);
+      toast({
+        title: "Erro Inesperado",
+        description: "Ocorreu um erro inesperado. Por favor, tente mais tarde.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -70,7 +96,7 @@ export default function ContactForm() {
                 <FormItem>
                   <FormLabel>Nome Completo</FormLabel>
                   <FormControl>
-                    <Input placeholder="Seu nome" {...field} />
+                    <Input placeholder="Seu nome" {...field} disabled={isSubmitting} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -83,7 +109,7 @@ export default function ContactForm() {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input type="email" placeholder="seu@email.com" {...field} />
+                    <Input type="email" placeholder="seu@email.com" {...field} disabled={isSubmitting} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -100,6 +126,7 @@ export default function ContactForm() {
                       placeholder="Descreva sua necessidade ou dúvida..."
                       className="min-h-[120px]"
                       {...field}
+                      disabled={isSubmitting}
                     />
                   </FormControl>
                   <FormMessage />
@@ -108,9 +135,13 @@ export default function ContactForm() {
             />
           </CardContent>
           <CardFooter>
-            <Button type="submit" className="w-full" size="lg">
-              <Send className="mr-2 h-5 w-5" />
-              Enviar Mensagem
+            <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
+              {isSubmitting ? (
+                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+              ) : (
+                <Send className="mr-2 h-5 w-5" />
+              )}
+              {isSubmitting ? "Enviando..." : "Enviar Mensagem"}
             </Button>
           </CardFooter>
         </form>
