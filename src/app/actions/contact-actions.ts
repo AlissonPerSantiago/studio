@@ -2,14 +2,14 @@
 'use server';
 
 import { z } from 'zod';
-// import { improveContactFormPrompt, type ImproveContactFormPromptInput } from '@/ai/flows/improve-contact-form-prompt';
+import { improveContactFormPrompt, type ImproveContactFormPromptInput } from '@/ai/flows/improve-contact-form-prompt';
 import type { ContactFormData } from '@/components/forms/contact-form';
-// import nodemailer from 'nodemailer';
+import nodemailer from 'nodemailer';
 
 const contactFormSchema = z.object({
-  name: z.string().min(2),
-  email: z.string().email(),
-  message: z.string().min(10).max(500),
+  name: z.string().min(2, { message: "O nome deve ter pelo menos 2 caracteres." }),
+  email: z.string().email({ message: "Por favor, insira um email válido." }),
+  message: z.string().min(10, { message: "A mensagem deve ter pelo menos 10 caracteres." }).max(500, { message: "A mensagem não pode exceder 500 caracteres." }),
 });
 
 interface SubmitContactFormResponse {
@@ -21,99 +21,109 @@ interface SubmitContactFormResponse {
 export async function submitContactForm(
   data: ContactFormData
 ): Promise<SubmitContactFormResponse> {
-  console.log("--- submitContactForm ACTION INICIADA ---");
-  console.log("--- DADOS RECEBIDOS PELA ACTION ---", JSON.stringify(data, null, 2));
-
-  console.log("--- Variáveis de ambiente SMTP DENTRO DA ACTION ---");
-  console.log("SMTP_HOST:", process.env.SMTP_HOST ? "Definido" : "NÃO DEFINIDO");
-  console.log("SMTP_PORT:", process.env.SMTP_PORT ? "Definido" : "NÃO DEFINIDO");
-  console.log("SMTP_USER:", process.env.SMTP_USER ? "Definido" : "NÃO DEFINIDO");
-  console.log("SMTP_PASS:", process.env.SMTP_PASS ? "Definido (comprimento: " + (process.env.SMTP_PASS?.length || 0) + ")" : "NÃO DEFINIDO");
-  console.log("EMAIL_TO:", process.env.EMAIL_TO ? "Definido" : "NÃO DEFINIDO");
+  console.log("Recebida submissão do formulário de contato:", data.email);
 
   const validationResult = contactFormSchema.safeParse(data);
 
   if (!validationResult.success) {
-    console.error('--- ERRO DE VALIDAÇÃO NA ACTION ---:', validationResult.error.flatten());
+    console.error('Erro de validação na action de contato:', validationResult.error.flatten());
     return {
       success: false,
-      error: 'Dados inválidos. Por favor, verifique o formulário.',
+      error: 'Dados inválidos. Por favor, verifique o formulário e tente novamente.',
     };
   }
-  console.log("--- VALIDAÇÃO DOS DADOS OK ---");
 
-  // const { name, email, message } = validationResult.data;
+  const { name, email, message } = validationResult.data;
+  let improvedMessage = message; // Usar mensagem original como fallback
 
   try {
-    console.log("--- ANTES DE CHAMAR improveContactFormPrompt (CHAMADA COMENTADA) ---");
-    // const improveInput: ImproveContactFormPromptInput = {
-    //   submissionText: message,
-    // };
-    // const improvedResult = await improveContactFormPrompt(improveInput);
-    // const improvedMessage = improvedResult.improvedText;
-    // console.log("--- DEPOIS DE CHAMAR improveContactFormPrompt (CHAMADA COMENTADA) ---");
-    // console.log('Mensagem Original:', message);
-    // console.log('Mensagem (Simulada) Melhorada:', improvedMessage);
-
-    console.log("--- ANTES DE CONFIGURAR Nodemailer Transporter (BLOCO COMENTADO) ---");
-    /*
-    const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: Number(process.env.SMTP_PORT),
-      secure: Number(process.env.SMTP_PORT) === 465,
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-      debug: true,
-      logger: true,
-    });
-
-    console.log("--- ANTES DE CHAMAR transporter.sendMail (BLOCO COMENTADO) ---");
-    const mailOptions = {
-      from: `"${name}" <${process.env.SMTP_USER}>`,
-      replyTo: email,
-      to: process.env.EMAIL_TO,
-      subject: `Nova mensagem de contato de ${name} (VATEC Automação - TESTE DEBUG)`,
-      text: `Nome: ${name}\nEmail: ${email}\n\nMensagem Original:\n${message}\n\nMensagem (Simulada) Melhorada:\n${improvedMessage}`,
-      html: `
-        <p><strong>Nome:</strong> ${name}</p>
-        <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
-        <hr>
-        <p><strong>Mensagem Original:</strong></p>
-        <p>${message.replace(/\n/g, '<br>')}</p>
-        <hr>
-        <p><strong>Mensagem (Simulada) Melhorada:</strong></p>
-        <p>${improvedMessage.replace(/\n/g, '<br>')}</p>
-      `,
+    console.log("Tentando melhorar a mensagem com IA...");
+    const improveInput: ImproveContactFormPromptInput = {
+      submissionText: message,
     };
+    const improvedResult = await improveContactFormPrompt(improveInput);
+    improvedMessage = improvedResult.improvedText;
+    console.log('Mensagem original:', message);
+    console.log('Mensagem melhorada pela IA:', improvedMessage);
+  } catch (aiError: any) {
+    console.error("Erro ao tentar melhorar a mensagem com IA:", aiError.message);
+    // Continuar com a mensagem original se a IA falhar
+  }
 
+  if (
+    !process.env.SMTP_HOST ||
+    !process.env.SMTP_PORT ||
+    !process.env.SMTP_USER ||
+    !process.env.SMTP_PASS ||
+    !process.env.EMAIL_TO
+  ) {
+    console.error("Erro Crítico: Variáveis de ambiente SMTP não configuradas corretamente.");
+    return {
+      success: false,
+      error: "O servidor não está configurado para enviar e-mails. Por favor, contate o administrador.",
+    };
+  }
+
+  const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: Number(process.env.SMTP_PORT),
+    secure: Number(process.env.SMTP_PORT) === 465, // true para porta 465 (SSL), false para outras (como 587 para STARTTLS)
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
+    // tls: { // Descomente e use com cautela se o servidor SMTP tiver certificado auto-assinado
+    //   rejectUnauthorized: false
+    // }
+  });
+
+  const mailOptions = {
+    from: `"${name}" <${process.env.SMTP_USER}>`, // O e-mail do remetente deve ser o mesmo autenticado
+    replyTo: email,
+    to: process.env.EMAIL_TO, // E-mail que receberá as mensagens
+    subject: `Nova mensagem de contato de ${name} (VATEC Automação)`,
+    text: `Nome: ${name}\nEmail: ${email}\n\nMensagem Original:\n${message}\n\nMensagem Melhorada pela IA:\n${improvedMessage}`,
+    html: `
+      <h3>Nova Mensagem de Contato</h3>
+      <p><strong>Nome:</strong> ${name}</p>
+      <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
+      <hr>
+      <h4>Mensagem Original:</h4>
+      <p>${message.replace(/\n/g, '<br>')}</p>
+      <hr>
+      <h4>Mensagem Melhorada pela IA:</h4>
+      <p>${improvedMessage.replace(/\n/g, '<br>')}</p>
+    `,
+  };
+
+  try {
+    console.log(`Tentando enviar e-mail para ${process.env.EMAIL_TO}...`);
     await transporter.sendMail(mailOptions);
-    console.log('--- DEPOIS DE CHAMAR transporter.sendMail (BLOCO COMENTADO) --- E-mail enviado com sucesso para:', process.env.EMAIL_TO);
-    */
-
-    console.log("--- SIMULAÇÃO DE ENVIO DE E-MAIL CONCLUÍDA (CÓDIGO DE ENVIO REAL COMENTADO) ---");
-
+    console.log('E-mail enviado com sucesso para:', process.env.EMAIL_TO);
     return {
       success: true,
-      message: 'Sua mensagem foi processada (envio de e-mail desativado para teste).',
+      message: 'Sua mensagem foi enviada com sucesso! Responderemos em breve.',
     };
-
-  } catch (error: any) {
-    console.error('--- ERRO DETALHADO NO CATCH da Server Action ---');
-    console.error('Mensagem do Erro:', error.message);
-    console.error('Código do Erro (se houver):', error.code);
-    console.error('Nome do Erro:', error.name);
-    console.error('Stack Trace:', error.stack);
-    console.error('Objeto de Erro Completo:', JSON.stringify(error, null, 2));
-
-    let errorMessage = 'Ocorreu um erro ao processar sua mensagem (debug). Tente novamente mais tarde.';
-    // Não exponha detalhes do erro diretamente ao cliente em produção por segurança
-    // errorMessage += ` Detalhe: ${error.message}`;
+  } catch (emailError: any) {
+    console.error('Erro detalhado ao enviar e-mail com Nodemailer:');
+    console.error('Mensagem do Erro:', emailError.message);
+    console.error('Código do Erro (se houver):', emailError.code);
+    console.error('Nome do Erro:', emailError.name);
+    // Não logar o stack trace completo em produção, a menos que necessário para depuração específica.
+    // console.error('Stack Trace:', emailError.stack);
+    
+    // Exemplo de como tratar códigos de erro comuns do Nodemailer
+    let userErrorMessage = 'Ocorreu um erro ao enviar sua mensagem. Tente novamente mais tarde.';
+    if (emailError.code === 'EAUTH') {
+      userErrorMessage = 'Falha na autenticação com o servidor de e-mail. Verifique as credenciais.';
+      // Em produção, você não mostraria "Verifique as credenciais" ao usuário, mas logaria isso para o admin.
+    } else if (emailError.code === 'ECONNREFUSED') {
+      userErrorMessage = 'Não foi possível conectar ao servidor de e-mail.';
+    }
 
     return {
       success: false,
-      error: errorMessage,
+      error: userErrorMessage,
     };
   }
 }
