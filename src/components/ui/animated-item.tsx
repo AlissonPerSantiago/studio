@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useEffect, useRef, useState } from 'react';
@@ -24,6 +25,12 @@ const AnimatedItem: React.FC<AnimatedItemProps> = ({
   const itemRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Ensure IntersectionObserver is available, though it's widely supported
+    if (typeof IntersectionObserver === 'undefined') {
+      setIsVisible(true); // Fallback for very old browsers or environments
+      return;
+    }
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -31,12 +38,11 @@ const AnimatedItem: React.FC<AnimatedItemProps> = ({
             setTimeout(() => {
               setIsVisible(true);
             }, delay);
-            if (once) {
-              observer.unobserve(entry.target);
+            if (once && itemRef.current) { // Check ref.current exists before unobserving
+              observer.unobserve(itemRef.current);
             }
           } else if (!once) {
-             // Option to re-trigger animation if it leaves and re-enters viewport
-            // setIsVisible(false); 
+             // setIsVisible(false); // Option to re-trigger animation
           }
         });
       },
@@ -45,20 +51,21 @@ const AnimatedItem: React.FC<AnimatedItemProps> = ({
       }
     );
 
-    const currentRef = itemRef.current;
-    if (currentRef) {
-      observer.observe(currentRef);
+    const currentRefValue = itemRef.current;
+    if (currentRefValue) {
+      observer.observe(currentRefValue);
     }
 
     return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
+      if (currentRefValue) {
+        observer.unobserve(currentRefValue);
       }
     };
   }, [delay, animationType, threshold, once]);
 
   const animationClasses = {
-    fadeInUp: `transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`,
+    // Simplified fadeInUp to only use opacity for now
+    fadeInUp: `transition-opacity duration-700 ease-out ${isVisible ? 'opacity-100' : 'opacity-0'}`,
     fadeIn: `transition-opacity duration-700 ease-out ${isVisible ? 'opacity-100' : 'opacity-0'}`,
   };
 
