@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 interface AnimatedItemProps {
   children: React.ReactNode;
   className?: string;
-  delay?: number;
+  delay?: number; // Propriedade delay ainda existe, mas será ignorada internamente para este teste
   animationType?: 'fadeInUp' | 'fadeIn';
   threshold?: number;
   once?: boolean;
@@ -16,7 +16,7 @@ interface AnimatedItemProps {
 const AnimatedItem: React.FC<AnimatedItemProps> = ({
   children,
   className,
-  delay = 0,
+  delay = 0, // Valor do delay recebido, mas não usado no setTimeout
   animationType = 'fadeInUp',
   threshold = 0.1,
   once = true,
@@ -30,14 +30,16 @@ const AnimatedItem: React.FC<AnimatedItemProps> = ({
       return;
     }
 
-    let timeoutId: NodeJS.Timeout | null = null;
+    // A lógica de timeoutId e setTimeout é removida para este teste.
+    // let timeoutId: NodeJS.Timeout | null = null;
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            timeoutId = setTimeout(() => {
-              setIsVisible(true);
-            }, delay);
+            // Define isVisible como true diretamente, ignorando o delay.
+            setIsVisible(true);
+            
             if (once && itemRef.current) {
               observer.unobserve(itemRef.current);
             }
@@ -58,11 +60,12 @@ const AnimatedItem: React.FC<AnimatedItemProps> = ({
       if (currentRefValue) {
         observer.unobserve(currentRefValue);
       }
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
+      // if (timeoutId) { // Lógica de timeout removida
+      //   clearTimeout(timeoutId);
+      // }
     };
-  }, [delay, threshold, once]); // animationType removed from dependencies as it's not used in the effect logic
+  // A dependência 'delay' é removida porque o setTimeout não está sendo usado aqui.
+  }, [threshold, once]); 
 
   const animationClasses = {
     fadeInUp: `transition-opacity duration-700 ease-out ${isVisible ? 'opacity-100' : 'opacity-0'}`,
