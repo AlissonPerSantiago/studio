@@ -31,7 +31,7 @@ export default function Header() {
       }`}
     >
       <div className="container mx-auto flex h-20 items-center justify-between px-4 md:px-6">
-        <Link href="/" className="flex items-center gap-3" prefetch={false}>
+        <Link href="/" className="flex items-baseline gap-3" prefetch={false}>
           <Image
             src="/logo.png"
             alt="VATEC Logo"
@@ -41,7 +41,7 @@ export default function Header() {
             priority
             data-ai-hint="logo company"
           />
-          <span className="font-headline text-xl font-semibold text-foreground hidden sm:inline">
+          <span className="font-headline text-lg font-semibold text-foreground hidden sm:inline">
             Automação Industrial
           </span>
         </Link>
@@ -66,7 +66,7 @@ export default function Header() {
           </SheetTrigger>
           <SheetContent side="right">
             <div className="grid gap-4 p-6">
-              <Link href="/" className="flex items-center gap-2 mb-4" prefetch={false}>
+              <Link href="/" className="flex items-baseline gap-2 mb-4" prefetch={false}>
                  <Image
                     src="/logo.png"
                     alt="VATEC Logo"
@@ -75,7 +75,7 @@ export default function Header() {
                     className="h-auto"
                     data-ai-hint="logo company"
                   />
-                <span className="font-headline text-lg font-semibold text-foreground">Automação Industrial</span>
+                <span className="font-headline text-base font-semibold text-foreground">Automação Industrial</span>
               </Link>
               <nav className="grid gap-2">
                 {navItems.map((item) => (
