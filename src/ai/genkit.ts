@@ -1,27 +1,30 @@
+// As importações de 'genkit' e '@genkit-ai/googleai' foram removidas
+// pois estas bibliotecas são destinadas a ambientes Node.js e não são
+// compatíveis com um build puramente estático (output: 'export').
+// Manter as importações, mesmo que o código de inicialização esteja comentado,
+// pode levar a erros durante o processo de build do Next.js para exportação estática.
 
-import {genkit} from 'genkit';
-import {googleAI} from '@genkit-ai/googleai';
-
-// A inicialização do Genkit foi comentada pois todos os fluxos de IA foram removidos
-// devido à incompatibilidade com um ambiente de hospedagem sem Node.js.
-// Se você reintroduzir funcionalidades de IA que possam ser executadas no lado do cliente
-// ou através de APIs externas (sem Genkit rodando no servidor Next.js),
-// você pode precisar de uma configuração diferente.
-
-/*
-export const ai = genkit({
-  plugins: [googleAI()],
-  model: 'googleai/gemini-2.0-flash',
-});
-*/
-
-// Para evitar erros de importação se 'ai' for referenciado em algum lugar que não foi pego,
-// podemos exportar um objeto mock simples ou null. No entanto, o ideal é remover todas as referências.
-// Por enquanto, vamos exportar um objeto para evitar quebras de importação diretas,
-// mas ele não terá funcionalidade.
+// Para evitar erros de importação se 'ai' for referenciado em algum lugar,
+// exportamos um objeto mock simples. Se nenhuma funcionalidade de IA for
+// usada no lado do cliente, idealmente todas as referências a este 'ai' mock
+// também seriam removidas dos componentes.
 export const ai = {
-    defineFlow: () => {},
-    definePrompt: () => {},
-    generate: async () => ({ text: () => "AI functionality disabled for static export."}),
-    // Adicione outros mocks de funções do Genkit se necessário
+  defineFlow: (...args: any[]): any => {
+    console.warn("Genkit ai.defineFlow called in static export mode. AI functionality is disabled.");
+    return async (input: any) => {
+      throw new Error("AI Flow executed in static mode, which is not supported.");
+    };
+  },
+  definePrompt: (...args: any[]): any => {
+    console.warn("Genkit ai.definePrompt called in static export mode. AI functionality is disabled.");
+    return async (input: any) => {
+      return { output: "AI Prompt called in static mode. Functionality disabled." };
+    };
+  },
+  generate: async (options: any): Promise<any> => {
+    console.warn("Genkit ai.generate called in static export mode. AI functionality is disabled.");
+    return { text: () => "AI functionality disabled for static export." };
+  },
+  // Adicione outros mocks de funções do Genkit se forem estritamente necessários
+  // para evitar quebras de importação, mas lembre-se que a funcionalidade real não existirá.
 };

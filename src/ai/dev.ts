@@ -1,9 +1,5 @@
-
-import { config } from 'dotenv';
-config();
-
-// Removida a importação de generate-service-description.ts pois o fluxo foi removido
-// import '@/ai/flows/generate-service-description.ts';
-
-// Removida a importação de improve-contact-form-prompt.ts pois o fluxo foi removido
-// import '@/ai/flows/improve-contact-form-prompt.ts';
+// Este arquivo anteriormente continha configurações de desenvolvimento para Genkit,
+// incluindo a importação de 'dotenv'.
+// Para um build estático (output: 'export'), 'dotenv' e outras lógicas
+// específicas do Node.js não devem ser incluídas no bundle do cliente.
+// O conteúdo foi removido para evitar erros de build ou runtime.
