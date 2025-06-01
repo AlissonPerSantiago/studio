@@ -60,22 +60,14 @@ export async function submitContactForm(
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
       },
-      debug: true, // Habilita logs de debug do nodemailer
-      logger: true // Garante que os logs de debug sejam enviados para o console
       // Opção para permitir certificados auto-assinados (use com cautela e apenas se necessário)
       // tls: {
       //   rejectUnauthorized: false
       // }
     });
 
-    console.log('Tentando enviar e-mail com as seguintes configurações:');
-    console.log('Host:', process.env.SMTP_HOST);
-    console.log('Porta:', process.env.SMTP_PORT);
-    console.log('Usuário SMTP:', process.env.SMTP_USER ? '******' : 'NÃO DEFINIDO'); // Não logar o usuário real, apenas se está definido
-
-
     const mailOptions = {
-      from: `"${name}" <${process.env.SMTP_USER}>`, // Use o e-mail configurado no SMTP_USER
+      from: `"${name}" <${process.env.SMTP_USER}>`, // Use o e-mail configurado no SMTP_USER ou um e-mail "noreply"
       replyTo: email, // E-mail do usuário que preencheu o formulário
       to: process.env.EMAIL_TO, // Para quem o e-mail será enviado (você)
       subject: `Nova mensagem de contato de ${name} (VATEC Automação)`,
@@ -100,26 +92,14 @@ export async function submitContactForm(
       message: 'Sua mensagem foi enviada com sucesso!',
     };
   } catch (error) {
-    console.error('--- FALHA NO ENVIO DO E-MAIL ---');
-    console.error('Erro completo:', error); // Loga o objeto de erro completo
-
-    if (typeof error === 'object' && error !== null) {
-      const nodemailerError = error as any;
-      if (nodemailerError.code) {
-        console.error('Código do erro Nodemailer:', nodemailerError.code);
-      }
-      if (nodemailerError.response) {
-        console.error('Resposta do servidor SMTP:', nodemailerError.response);
-      }
-      if (nodemailerError.responseCode) {
-        console.error('Código de resposta SMTP:', nodemailerError.responseCode);
-      }
-      if (nodemailerError.command) {
-        console.error('Comando SMTP com falha:', nodemailerError.command);
-      }
-    }
-    
+    console.error('Erro ao processar formulário de contato ou enviar e-mail:', error);
+    // Para depuração, podemos logar o erro específico
     let errorMessage = 'Ocorreu um erro ao processar sua mensagem. Tente novamente mais tarde.';
+    if (error instanceof Error) {
+        console.error('Detalhes do erro:', error.message);
+        // Não exponha detalhes do erro diretamente ao cliente em produção por segurança
+        // errorMessage += ` Detalhe: ${error.message}`; // Remova ou ajuste para produção
+    }
     return {
       success: false,
       error: errorMessage,
