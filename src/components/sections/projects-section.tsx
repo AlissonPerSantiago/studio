@@ -2,6 +2,7 @@
 "use client";
 
 import Image from 'next/image';
+import AnimatedItem from '@/components/ui/animated-item';
 
 interface Project {
   id: string;
@@ -46,7 +47,7 @@ export default function ProjectsSection() {
   return (
     <section id="projects" className="py-16 md:py-24 bg-background">
       <div className="container mx-auto px-4 md:px-6">
-        
+        <AnimatedItem delay={0}>
           <div className="mb-12 text-center">
             <h2 className="font-headline text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
               Projetos em Destaque
@@ -55,12 +56,11 @@ export default function ProjectsSection() {
               Conheça alguns dos nossos trabalhos e soluções implementadas.
             </p>
           </div>
-        
+        </AnimatedItem>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {projectsData.map((project, index) => (
-            
+            <AnimatedItem key={project.id} delay={100 * (index + 1)}>
               <div
-                key={project.id}
                 className="group relative overflow-hidden rounded-lg shadow-lg transition-all duration-300 ease-in-out hover:shadow-2xl h-full"
               >
                 <Image
@@ -80,7 +80,7 @@ export default function ProjectsSection() {
                   </p>
                 </div>
               </div>
-            
+            </AnimatedItem>
           ))}
         </div>
       </div>

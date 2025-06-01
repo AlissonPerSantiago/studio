@@ -15,6 +15,8 @@ export type ImproveContactFormPromptOutput = { improvedPrompt: string };
 export async function improveContactFormPrompt(
   input: ImproveContactFormPromptInput
 ): Promise<ImproveContactFormPromptOutput> {
-  console.warn("improveContactFormPrompt (AI flow) called but is disabled for static export.");
-  throw new Error("AI Flow executed in static mode, which is not supported.");
+  console.warn("improveContactFormPrompt (AI flow) called but is disabled for static export. Returning mock data.");
+  // Não lançar erro para não quebrar o build estático.
+  return { improvedPrompt: "AI-improved prompt is disabled for static export." };
 }
+

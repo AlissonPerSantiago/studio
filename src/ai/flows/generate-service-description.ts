@@ -15,6 +15,8 @@ export type GenerateServiceDescriptionOutput = { description: string };
 export async function generateServiceDescription(
   input: GenerateServiceDescriptionInput
 ): Promise<GenerateServiceDescriptionOutput> {
-  console.warn("generateServiceDescription (AI flow) called but is disabled for static export.");
-  throw new Error("AI Flow executed in static mode, which is not supported.");
+  console.warn("generateServiceDescription (AI flow) called but is disabled for static export. Returning mock data.");
+  // Não lançar erro para não quebrar o build estático.
+  return { description: "AI-generated description is disabled for static export." };
 }
+
