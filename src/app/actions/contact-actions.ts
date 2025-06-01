@@ -4,6 +4,7 @@
 import { z } from 'zod';
 import { improveContactFormPrompt, type ImproveContactFormPromptInput } from '@/ai/flows/improve-contact-form-prompt';
 import type { ContactFormData } from '@/components/forms/contact-form';
+import nodemailer from 'nodemailer';
 
 const contactFormSchema = z.object({
   name: z.string().min(2),
@@ -40,8 +41,7 @@ export async function submitContactForm(
     const improvedResult = await improveContactFormPrompt(improveInput);
     const improvedMessage = improvedResult.improvedText;
 
-    // Simulação do envio de e-mail/salvamento em BD
-    // No console do servidor (terminal onde 'npm run dev' está rodando)
+    // Log da mensagem original e melhorada no servidor
     console.log('--- Nova Mensagem de Contato Recebida ---');
     console.log('Nome:', name);
     console.log('Email:', email);
@@ -49,19 +49,60 @@ export async function submitContactForm(
     console.log('Mensagem Melhorada pela IA:', improvedMessage);
     console.log('----------------------------------------');
 
-    // Aqui você integraria um serviço de e-mail real (Resend, SendGrid, Nodemailer)
-    // ou salvaria os dados em um banco de dados (Firebase Firestore, Supabase, etc.)
-    // Exemplo: await sendEmail({ to: 'seu-email@example.com', subject: `Nova mensagem de ${name}`, body: `De: ${email}\n\n${improvedMessage}` });
+    // Configurar Nodemailer
+    // É CRUCIAL que estas variáveis de ambiente estejam definidas no seu ambiente de produção
+    // e no seu arquivo .env ou .env.local para desenvolvimento.
+    const transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: Number(process.env.SMTP_PORT),
+      secure: Number(process.env.SMTP_PORT) === 465, // true para porta 465, false para outras
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+      // Opção para permitir certificados auto-assinados (use com cautela e apenas se necessário)
+      // tls: {
+      //   rejectUnauthorized: false
+      // }
+    });
+
+    const mailOptions = {
+      from: `"${name}" <${process.env.SMTP_USER}>`, // Use o e-mail configurado no SMTP_USER ou um e-mail "noreply"
+      replyTo: email, // E-mail do usuário que preencheu o formulário
+      to: process.env.EMAIL_TO, // Para quem o e-mail será enviado (você)
+      subject: `Nova mensagem de contato de ${name} (VATEC Automação)`,
+      text: `Nome: ${name}\nEmail: ${email}\n\nMensagem Original:\n${message}\n\nMensagem Melhorada pela IA:\n${improvedMessage}`,
+      html: `
+        <p><strong>Nome:</strong> ${name}</p>
+        <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
+        <hr>
+        <p><strong>Mensagem Original:</strong></p>
+        <p>${message.replace(/\n/g, '<br>')}</p>
+        <hr>
+        <p><strong>Mensagem Melhorada pela IA:</strong></p>
+        <p>${improvedMessage.replace(/\n/g, '<br>')}</p>
+      `,
+    };
+
+    await transporter.sendMail(mailOptions);
+    console.log('E-mail enviado com sucesso para:', process.env.EMAIL_TO);
 
     return {
       success: true,
-      message: 'Sua mensagem foi recebida e processada com sucesso!',
+      message: 'Sua mensagem foi enviada com sucesso!',
     };
   } catch (error) {
-    console.error('Erro ao processar formulário de contato:', error);
+    console.error('Erro ao processar formulário de contato ou enviar e-mail:', error);
+    // Para depuração, podemos logar o erro específico
+    let errorMessage = 'Ocorreu um erro ao processar sua mensagem. Tente novamente mais tarde.';
+    if (error instanceof Error) {
+        console.error('Detalhes do erro:', error.message);
+        // Não exponha detalhes do erro diretamente ao cliente em produção por segurança
+        // errorMessage += ` Detalhe: ${error.message}`; // Remova ou ajuste para produção
+    }
     return {
       success: false,
-      error: 'Ocorreu um erro ao processar sua mensagem. Tente novamente mais tarde.',
+      error: errorMessage,
     };
   }
 }
