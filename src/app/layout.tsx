@@ -4,7 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 
 // INSTRUÇÃO IMPORTANTE PARA VOCÊ:
 // Substitua 'https://www.URL_DO_SEU_SITE.com.br' pela URL real e definitiva do seu site.
-const siteUrl = 'https://www.URL_DO_SEU_SITE.com.br';
+const siteUrl = 'https://vatecaut.ind.br';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl), // Essencial para URLs relativas em metadados (ex: openGraph image)
