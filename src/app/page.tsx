@@ -1,8 +1,8 @@
 
 import Header from "@/components/layout/header";
 import ServicesSection from "@/components/sections/services-section";
-import ClientsSection from "@/components/sections/clients-section"; // Importar a nova seção
-import ProjectsSection from "@/components/sections/projects-section"; // Importar a nova seção de projetos
+import ClientsSection from "@/components/sections/clients-section";
+import ProjectsSection from "@/components/sections/projects-section";
 import ContactSection from "@/components/sections/contact-section";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
@@ -52,9 +52,9 @@ export default function HomePage() {
 
         <ServicesSection />
 
-        <ClientsSection />
+        <ProjectsSection /> {/* Movido para antes de ClientsSection */}
 
-        <ProjectsSection /> {/* Adicionar a nova seção de projetos aqui */}
+        <ClientsSection />
 
         <Separator className="my-12 md:my-16" />
 
@@ -73,4 +73,3 @@ export default function HomePage() {
     </div>
   );
 }
-
