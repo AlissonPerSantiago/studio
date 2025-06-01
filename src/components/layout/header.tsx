@@ -41,7 +41,8 @@ export default function Header() {
             priority
             data-ai-hint="logo company"
           />
-          <span className="font-headline text-base font-semibold text-foreground mt-1 hidden sm:block">
+          {/* Texto abaixo do logo, removido sm:block para sempre ser visível no desktop */}
+          <span className="font-headline text-base font-semibold text-foreground mt-1">
             Automação Industrial
           </span>
         </Link>
@@ -75,7 +76,10 @@ export default function Header() {
                     className="h-auto"
                     data-ai-hint="logo company"
                   />
-                <span className="font-headline text-sm font-semibold text-foreground mt-1">Automação Industrial</span>
+                {/* Texto abaixo do logo no menu mobile */}
+                <span className="font-headline text-sm font-semibold text-foreground mt-1">
+                  Automação Industrial
+                </span>
               </Link>
               <nav className="grid gap-2">
                 {navItems.map((item) => (
