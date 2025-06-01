@@ -35,14 +35,13 @@ export default function Header() {
           <Image
             src="/logo.png"
             alt="VATEC Logo"
-            width={160}
-            height={40}
+            width={140} 
+            height={35}
             className="h-auto"
             priority
             data-ai-hint="logo company"
           />
-          {/* Texto abaixo do logo, removido sm:block para sempre ser visível no desktop */}
-          <span className="font-headline text-base font-semibold text-foreground mt-1">
+          <span className="font-headline text-sm font-semibold text-foreground mt-1">
             Automação Industrial
           </span>
         </Link>
@@ -71,13 +70,12 @@ export default function Header() {
                  <Image
                     src="/logo.png"
                     alt="VATEC Logo"
-                    width={136}
-                    height={34}
+                    width={120} 
+                    height={30}
                     className="h-auto"
                     data-ai-hint="logo company"
                   />
-                {/* Texto abaixo do logo no menu mobile */}
-                <span className="font-headline text-sm font-semibold text-foreground mt-1">
+                <span className="font-headline text-xs font-semibold text-foreground mt-1">
                   Automação Industrial
                 </span>
               </Link>
