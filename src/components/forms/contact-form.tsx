@@ -19,7 +19,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { useToast } from "@/hooks/use-toast";
 import { Send, Loader2 } from "lucide-react";
 import { useState } from "react";
-import { submitContactForm } from "@/app/actions/contact-actions";
+// Removida a importação da Server Action: import { submitContactForm } from "@/app/actions/contact-actions";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -37,6 +37,9 @@ const formSchema = z.object({
 
 export type ContactFormData = z.infer<typeof formSchema>;
 
+// Substitua pela URL do seu script PHP ou serviço de formulário
+const FORM_ENDPOINT_URL = "/api/enviar-contato.php"; // Exemplo: você precisará criar este script no seu servidor
+
 export default function ContactForm() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -53,19 +56,40 @@ export default function ContactForm() {
   async function onSubmit(values: ContactFormData) {
     setIsSubmitting(true);
     try {
-      const result = await submitContactForm(values);
+      const response = await fetch(FORM_ENDPOINT_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+      });
 
-      if (result.success) {
+      if (response.ok) {
+        // Tente pegar uma mensagem de sucesso do backend, se houver
+        let responseData = { message: "Obrigado por entrar em contato. Responderemos em breve." };
+        try {
+            responseData = await response.json();
+        } catch (e) {
+            // Se o backend não retornar JSON ou estiver vazio, usa a mensagem padrão
+        }
+
         toast({
           title: "Mensagem Enviada!",
-          description: result.message || "Obrigado por entrar em contato. Responderemos em breve.",
+          description: responseData.message,
           variant: "default",
         });
         form.reset();
       } else {
+        // Tente pegar uma mensagem de erro do backend, se houver
+        let errorData = { error: "Houve um problema ao enviar sua mensagem. Tente novamente." };
+         try {
+            errorData = await response.json();
+        } catch (e) {
+            // Se o backend não retornar JSON ou estiver vazio, usa a mensagem padrão
+        }
         toast({
           title: "Erro ao Enviar",
-          description: result.error || "Houve um problema ao enviar sua mensagem. Tente novamente.",
+          description: `${errorData.error} (Status: ${response.status})`,
           variant: "destructive",
         });
       }
@@ -73,7 +97,7 @@ export default function ContactForm() {
       console.error("Erro no envio do formulário:", error);
       toast({
         title: "Erro Inesperado",
-        description: "Ocorreu um erro inesperado. Por favor, tente mais tarde.",
+        description: "Ocorreu um erro inesperado ao conectar ao servidor. Por favor, tente mais tarde.",
         variant: "destructive",
       });
     } finally {
