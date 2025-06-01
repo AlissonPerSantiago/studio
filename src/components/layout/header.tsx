@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu } from "lucide-react"; 
+import { Menu } from "lucide-react";
 import React from 'react';
 
 export default function Header() {
@@ -31,18 +31,18 @@ export default function Header() {
       }`}
     >
       <div className="container mx-auto flex h-20 items-center justify-between px-4 md:px-6">
-        <Link href="/" className="flex items-center gap-2" prefetch={false}>
-          <Image 
-            src="/logo.png" 
-            alt="VATEC Automação Industrial Logo" 
-            width={160} 
-            height={40} 
+        <Link href="/" className="flex items-center gap-3" prefetch={false}>
+          <Image
+            src="/logo.png"
+            alt="VATEC Logo"
+            width={160}
+            height={40}
             className="h-auto"
             priority
-            data-ai-hint="logo"
+            data-ai-hint="logo company"
           />
-          <span className="sr-only font-headline text-2xl font-semibold text-foreground">
-            VATEC Automação Industrial
+          <span className="font-headline text-xl font-semibold text-foreground hidden sm:inline">
+            Automação Industrial
           </span>
         </Link>
         <nav className="hidden items-center gap-6 md:flex">
@@ -67,15 +67,15 @@ export default function Header() {
           <SheetContent side="right">
             <div className="grid gap-4 p-6">
               <Link href="/" className="flex items-center gap-2 mb-4" prefetch={false}>
-                 <Image 
-                    src="/logo.png" 
-                    alt="VATEC Automação Industrial Logo" 
-                    width={136} 
+                 <Image
+                    src="/logo.png"
+                    alt="VATEC Logo"
+                    width={136}
                     height={34}
                     className="h-auto"
-                    data-ai-hint="logo" 
+                    data-ai-hint="logo company"
                   />
-                <span className="sr-only font-headline text-xl font-semibold">VATEC Automação Industrial</span>
+                <span className="font-headline text-lg font-semibold text-foreground">Automação Industrial</span>
               </Link>
               <nav className="grid gap-2">
                 {navItems.map((item) => (
