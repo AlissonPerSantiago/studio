@@ -2,9 +2,9 @@
 'use server';
 
 import { z } from 'zod';
-import { improveContactFormPrompt, type ImproveContactFormPromptInput } from '@/ai/flows/improve-contact-form-prompt';
+// import { improveContactFormPrompt, type ImproveContactFormPromptInput } from '@/ai/flows/improve-contact-form-prompt';
 import type { ContactFormData } from '@/components/forms/contact-form';
-import nodemailer from 'nodemailer';
+// import nodemailer from 'nodemailer';
 
 const contactFormSchema = z.object({
   name: z.string().min(2),
@@ -42,7 +42,7 @@ export async function submitContactForm(
   }
   console.log("--- VALIDAÇÃO DOS DADOS OK ---");
 
-  const { name, email, message } = validationResult.data;
+  // const { name, email, message } = validationResult.data;
 
   try {
     console.log("--- ANTES DE CHAMAR improveContactFormPrompt (CHAMADA COMENTADA) ---");
@@ -51,12 +51,10 @@ export async function submitContactForm(
     // };
     // const improvedResult = await improveContactFormPrompt(improveInput);
     // const improvedMessage = improvedResult.improvedText;
-    const improvedMessage = message + " (IA desativada para teste)"; // Simulação
-    console.log("--- DEPOIS DE CHAMAR improveContactFormPrompt (CHAMADA COMENTADA) ---");
-    console.log('Mensagem Original:', message);
-    console.log('Mensagem (Simulada) Melhorada:', improvedMessage);
+    // console.log("--- DEPOIS DE CHAMAR improveContactFormPrompt (CHAMADA COMENTADA) ---");
+    // console.log('Mensagem Original:', message);
+    // console.log('Mensagem (Simulada) Melhorada:', improvedMessage);
 
-    // Temporariamente desabilitar envio de e-mail para focar nos logs
     console.log("--- ANTES DE CONFIGURAR Nodemailer Transporter (BLOCO COMENTADO) ---");
     /*
     const transporter = nodemailer.createTransport({
